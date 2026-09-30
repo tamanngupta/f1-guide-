@@ -1,376 +1,145 @@
 /* Box Box Box v2 — card lessons + quiz per module. Edit MODULES below. Progress in localStorage. */
+/* Lesson content. Each card: [title, explanation, optional swatch]. Each quiz item: [question, a, b, c, correctIndex]. */
+/* Lesson content. Each card: [title, explanation, optional swatch]. Each quiz item: [question, a, b, c, correctIndex]. */
+const M=(id,icon,title,cards,quiz)=>({id,icon,title,cards,quiz});
+const MODULES=[
+M("welcome","👋","Welcome to F1",[
+["What is Formula 1?","Formula 1 is the highest level of single-seater motor racing. Across a season of around 24 races held on several continents, teams compete with purpose-built cars that are among the fastest on any circuit in the world. It is a sport of driving skill, but just as much a contest of engineering, because every team designs and develops its own car within a strict set of regulations."],
+["Teams and drivers","Each team builds and runs two cars, so every team has two drivers. Through 2025 the grid had 10 teams and 20 cars, and Cadillac joined in 2026, making it 11 teams and 22 cars. Teammates drive essentially the same machinery, which makes them direct rivals within the team and the clearest measure of how good a driver really is."],
+["Two championships","Every race awards points, and those points feed two separate titles. The Drivers' Championship adds up each driver's individual points. The Constructors' Championship adds together the points of both drivers in a team. A driver can win the first while a different team wins the second, because the two tables measure different things."],
+["What happens on a weekend","A race weekend runs Friday to Sunday. Practice sessions let teams prepare the car, qualifying decides the starting order, and the Grand Prix itself is held on Sunday. On some weekends a shorter Sprint race is added on Saturday. You will see each of these in detail in the next module."],
+["How long is a season?","The season begins around March and finishes in early December. It consists of roughly 24 rounds, each held at a different circuit, and the championships are decided by the total points collected over all of them. Consistency across the whole year matters as much as winning individual races."],
+["Explaining F1 in two minutes","Teams design and build cars. Two drivers per team race them on circuits around the world, and every race awards points according to finishing position. Across the season those points decide both a Drivers' champion and a Constructors' champion. Results come from the driver, the car's engineering, and the strategy decisions made during the race."]],
+[["How many championships are contested?","One","Two","Three",1],["Constructors' points come from...","One driver","Both drivers combined","Fan votes",1],["Roughly how many races in a season?","10","24","50",1]]),
 
-const M = (id, icon, title, cards, quiz) => ({ id, icon, title, cards, quiz });
+M("weekend","🏁","The F1 Weekend",[
+["Practice 1, 2 and 3","Practice sessions are one-hour, non-competitive sessions held before qualifying. Teams use them to learn how the circuit behaves, test different tyre compounds and adjust the car's setup, such as wing angles and suspension stiffness. No points are awarded, but the information gathered determines how well prepared each team is for qualifying and the race."],
+["Qualifying: Q1, Q2, Q3","Qualifying sets the starting grid through three knockout rounds. With 22 cars, the six slowest are eliminated after Q1 and another six after Q2, leaving ten drivers for Q3. Each driver's fastest lap counts, and the quickest in Q3 starts on pole position, the front-row spot on the inside of the grid."],
+["Sprint weekends","On Sprint weekends there is one practice session, followed by Sprint Qualifying, a Sprint race of about 100 km on Saturday, and then the usual qualifying for the Grand Prix. The Sprint awards points to the top eight finishers, from 8 down to 1. Because practice time is limited, teams have less opportunity to fine-tune the car."],
+["The formation lap","Shortly before the race, the cars leave the pits and drive one slow lap called the formation lap. It lets drivers warm their tyres and brakes, check their systems and then line up in their grid slots. Nobody may overtake during this lap."],
+["The start and the race","Five red lights illuminate one after another and then go out, which signals the start. The race covers at least 305 km, except at Monaco where the minimum is 260 km, and it must finish within two hours of starting unless it is interrupted. Drivers complete the laps required to reach that distance."],
+["Chequered flag and podium","When the leader crosses the line after the final lap, the chequered flag ends the race and everyone else finishes at the end of their own lap. The top three finishers go to the podium for the trophies. Afterwards the FIA inspects cars, and a car found to break the rules can be disqualified."],
+["Parc fermé","From the start of qualifying, cars are placed under parc fermé conditions. Teams may only make limited changes to the car, which means the setup chosen for qualifying largely carries over to the race. This forces teams to make a balanced compromise rather than building two different cars."]],
+[["What sets the starting grid?","Practice","Qualifying","The podium",1],["How long is a Sprint race?","About 100 km","About 305 km","About 500 km",0],["The start signal is...","Five red lights going out","A green flag","A siren",0]]),
 
-const MODULES = [
-  M(
-    "welcome",
-    "👋",
-    "Welcome to F1",
-    [
-      ["What is Formula 1?", "Formula 1 is the highest level of single-seater motor racing. Across a season of around 24 races held on several continents, teams compete with purpose-built cars that are among the fastest on any circuit in the world. It is a sport of driving skill, but just as much a contest of engineering, because every team designs and develops its own car within a strict set of regulations."],
-      ["Teams and drivers", "Each team builds and runs two cars, so every team has two drivers. Through 2025 the grid had 10 teams and 20 cars, and Cadillac joined in 2026, making it 11 teams and 22 cars. Teammates drive essentially the same machinery, which makes them direct rivals within the team and the clearest measure of how good a driver really is."],
-      ["Two championships", "Every race awards points, and those points feed two separate titles. The Drivers' Championship adds up each driver's individual points. The Constructors' Championship adds together the points of both drivers in a team. A driver can win the first while a different team wins the second, because the two tables measure different things."],
-      ["What happens on a weekend", "A race weekend runs Friday to Sunday. Practice sessions let teams prepare the car, qualifying decides the starting order, and the Grand Prix itself is held on Sunday. On some weekends a shorter Sprint race is added on Saturday. You will see each of these in detail in the next module."],
-      ["How long is a season?", "The season begins around March and finishes in early December. It consists of roughly 24 rounds, each held at a different circuit, and the championships are decided by the total points collected over all of them. Consistency across the whole year matters as much as winning individual races."],
-      ["Explaining F1 in two minutes", "Teams design and build cars. Two drivers per team race them on circuits around the world, and every race awards points according to finishing position. Across the season those points decide both a Drivers' champion and a Constructors' champion. Results come from the driver, the car's engineering, and the strategy decisions made during the race."]
-    ],
-    [
-      ["How many championships are contested?", "One", "Two", "Three", 1],
-      ["Constructors' points come from...", "One driver", "Both drivers combined", "Fan votes", 1],
-      ["Roughly how many races in a season?", "10", "24", "50", 1]
-    ]
-  ),
-  M(
-    "weekend",
-    "🏁",
-    "The F1 Weekend",
-    [
-      ["Practice 1, 2 and 3", "Practice sessions are one-hour, non-competitive sessions held before qualifying. Teams use them to learn how the circuit behaves, test different tyre compounds and adjust the car's setup, such as wing angles and suspension stiffness. No points are awarded, but the information gathered determines how well prepared each team is for qualifying and the race."],
-      ["Qualifying: Q1, Q2, Q3", "Qualifying sets the starting grid through three knockout rounds. With 22 cars, the six slowest are eliminated after Q1 and another six after Q2, leaving ten drivers for Q3. Each driver's fastest lap counts, and the quickest in Q3 starts on pole position, the front-row spot on the inside of the grid."],
-      ["Sprint weekends", "On Sprint weekends there is one practice session, followed by Sprint Qualifying, a Sprint race of about 100 km on Saturday, and then the usual qualifying for the Grand Prix. The Sprint awards points to the top eight finishers, from 8 down to 1. Because practice time is limited, teams have less opportunity to fine-tune the car."],
-      ["The formation lap", "Shortly before the race, the cars leave the pits and drive one slow lap called the formation lap. It lets drivers warm their tyres and brakes, check their systems and then line up in their grid slots. Nobody may overtake during this lap."],
-      ["The start and the race", "Five red lights illuminate one after another and then go out, which signals the start. The race covers at least 305 km, except at Monaco where the minimum is 260 km, and it must finish within two hours of starting unless it is interrupted. Drivers complete the laps required to reach that distance."],
-      ["Chequered flag and podium", "When the leader crosses the line after the final lap, the chequered flag ends the race and everyone else finishes at the end of their own lap. The top three finishers go to the podium for the trophies. Afterwards the FIA inspects cars, and a car found to break the rules can be disqualified."],
-      ["Parc fermé", "From the start of qualifying, cars are placed under parc fermé conditions. Teams may only make limited changes to the car, which means the setup chosen for qualifying largely carries over to the race. This forces teams to make a balanced compromise rather than building two different cars."]
-    ],
-    [
-      ["What sets the starting grid?", "Practice", "Qualifying", "The podium", 1],
-      ["How long is a Sprint race?", "About 100 km", "About 305 km", "About 500 km", 0],
-      ["The start signal is...", "Five red lights going out", "A green flag", "A siren", 0]
-    ]
-  ),
-  M(
-    "car",
-    "🔧",
-    "The F1 Car",
-    [
-      ["Front wing", "The front wing is the first part of the car to meet the air. It generates downforce on the front axle and, equally important, directs airflow around the front tyres and towards the rest of the car. The quality of the airflow it sends backwards strongly affects how well the floor and rear wing work."],
-      ["Rear wing", "The rear wing produces downforce at the back of the car, helping the rear tyres grip during acceleration and cornering. It also contains the movable flap used by the Drag Reduction System. The angle of the wing is chosen for each circuit, steeper for grip and flatter for straight-line speed."],
-      ["Floor and diffuser", "The floor generates the largest share of a modern F1 car's downforce. Tunnels underneath it accelerate the air, which lowers its pressure and pulls the car towards the ground. The diffuser is the upward-curving section at the rear of the floor that lets this fast air expand smoothly back to normal speed."],
-      ["Sidepods and halo", "The sidepods sit alongside the driver and hold the radiators that cool the power unit, and their shape guides air towards the rear of the car. The halo is a titanium structure above the cockpit that protects the driver's head from impacts and debris, and it has prevented serious injuries in several crashes."],
-      ["Suspension, tyres and brakes", "The suspension connects the wheels to the car and keeps the floor at the correct height above the track, which is crucial for aerodynamics. Tyres are the only contact with the road. Carbon brakes can reach around 1,000°C and can stop the car from about 300 km/h in roughly four seconds."],
-      ["Steering wheel", "The steering wheel works as a control panel. Drivers use its buttons, rotary switches and screen to talk to the team, adjust brake balance, change how the power unit uses its electrical energy and alter differential settings. They often change these during a single lap."],
-      ["Downforce and drag", "Downforce is aerodynamic force that pushes the car into the track, giving the tyres more grip so it can corner faster. Drag is air resistance that slows the car on straights. Both grow with the square of speed, and wings that add downforce also add drag, so teams balance grip against top speed for each circuit."],
-      ["Ground effect and dirty air", "Ground effect is the suction produced by the tunnels under the floor. Dirty air is the turbulent wake left behind a car, which reduces the downforce of a car following closely and makes overtaking difficult. Since 2022, cars rely more on ground effect so that following another car costs less grip."],
-      ["DRS", "The Drag Reduction System, used from 2011 to 2025, allowed a driver within one second of the car ahead to open a flap on the rear wing in designated zones. Opening it reduced drag and increased speed on the straight, making a pass more likely. For 2026 it is replaced by active aerodynamics, where the wings change between cornering and straight-line modes."]
-    ],
-    [
-      ["Wings mainly provide...", "Cooling", "Downforce", "Power", 1],
-      ["Ground effect comes from...", "Tunnels under the floor", "A bigger engine", "The halo", 0],
-      ["Dirty air affects the car...", "In front", "Behind", "Both equally", 1]
-    ]
-  ),
-  M(
-    "pu",
-    "⚡",
-    "The Power Unit",
-    [
-      ["The internal combustion engine", "The core of the power unit is a 1.6-litre turbocharged V6 petrol engine that revs up to about 15,000 rpm. It burns fuel to drive the wheels, and on its own it produces around 800 horsepower. The remaining output, taking the total above 1,000 horsepower, comes from the electrical systems."],
-      ["The turbocharger", "The turbocharger uses exhaust gases to spin a turbine, which drives a compressor that forces extra air into the engine. More air allows more fuel to be burned in each cycle, which increases power without increasing engine size. Its energy comes from exhaust heat that would otherwise be wasted."],
-      ["MGU-K", "The Motor Generator Unit – Kinetic is connected to the drivetrain. When the car brakes it works as a generator and converts some of the car's motion into electricity, and on acceleration it works as a motor, delivering that stored energy as extra power to the wheels. Through 2025 it could add about 120 kW, around 160 horsepower."],
-      ["MGU-H", "The Motor Generator Unit – Heat was connected to the turbocharger. It turned exhaust heat energy into electricity, and it could also spin the turbo to eliminate lag. It was technically complex and expensive, and the MGU-H has been removed from the regulations for 2026."],
-      ["Energy Store and ERS", "The Energy Store is the battery that stores electricity harvested by the MGU-K and MGU-H. The Energy Recovery System, or ERS, is the term for the whole arrangement: the two motor generators, the battery and the electronics. Drivers have a limited amount of energy they may recover and deploy each lap, so using it wisely matters."],
-      ["Why hybrid, and why suppliers matter", "Hybrid systems turn energy that would be lost into speed, making F1 engines over 50% thermally efficient, much higher than a road car. Only a few manufacturers build power units, such as Mercedes, Ferrari, Honda, Audi and Red Bull-Ford, and many teams buy theirs. Because the power unit strongly affects performance, a team's supplier is a major advantage or limitation. The 2026 rules shift much more of the power to electrical energy."]
-    ],
-    [
-      ["The MGU-K recovers...", "Braking energy", "Exhaust heat", "Fuel", 0],
-      ["The turbo is driven by...", "Exhaust gas", "The battery", "The wheels", 0],
-      ["F1 uses hybrid power units to...", "Improve efficiency and recover energy", "Reduce safety", "Lower speed", 0]
-    ]
-  ),
-  M(
-    "tyres",
-    "🛞",
-    "Tyres",
-    [
-      ["Soft, Medium and Hard", "For dry running there are slick tyres (no tread) in several compounds, and the three used in each race are marked with red for Soft, yellow for Medium and white for Hard. The softer the compound, the more grip it gives and the faster it wears. Harder compounds last longer but are slower over a single lap."],
-      ["Intermediate and full wet tyres", "Intermediate tyres, marked green, have shallow grooves and are used on damp or drying tracks. Full wet tyres, marked blue, have deep grooves that displace large amounts of water and are used in heavy rain. Both are slower than slicks on a dry track and overheat quickly if the track dries."],
-      ["Temperature and grip", "A tyre works best in a narrow temperature range. If it is too cold it cannot grip properly, and if it is too hot it slides and wears faster. Drivers and teams constantly manage tyre temperature with throttle, braking, steering inputs and how hard they push."],
-      ["Degradation, graining and blistering", "Degradation is the gradual loss of grip as a tyre wears. Graining happens when a tyre slides and small rolls of rubber tear off and stick to its surface, reducing grip. Blistering happens when the inside of the tyre overheats, which causes bubbles and chunks to appear on the surface."],
-      ["Why not always use the softest tyre?", "Soft tyres are fastest for a few laps but wear out quickly, so they would need many pit stops. In a dry race, drivers must also use at least two different compounds. The best plan over the whole race is therefore rarely the same as the plan for the fastest single lap."],
-      ["Pit stops", "During a pit stop, the crew changes all four tyres while the car is stationary, which takes about two to three seconds. Including driving through the pit lane at the speed limit, a stop costs roughly 20 to 25 seconds compared with staying on track. Teams decide when to stop by weighing that time loss against the pace gained from fresh tyres."]
-    ],
-    [
-      ["A yellow-marked tyre is the...", "Soft", "Medium", "Hard", 1],
-      ["Blistering is caused by...", "Cold tyres", "Overheating", "Rain", 1],
-      ["Minimum dry compounds in a race?", "One", "Two", "Three", 1]
-    ]
-  ),
-  M(
-    "racing",
-    "⚔️",
-    "Racing and Overtaking",
-    [
-      ["Racing line and apex", "The racing line is the fastest path through a corner. Drivers approach wide, turn in towards the apex, the innermost point of the corner, and then run wide again on exit. Usually the exit matters most, because speed carried out of a corner continues along the straight that follows."],
-      ["Braking zones", "Braking zones are where most overtakes happen. A driver can brake slightly later than the car in front and move alongside before the corner. However, braking too late means missing the corner, so the attacker must judge whether the move can be completed."],
-      ["Slipstream and DRS", "When a car travels closely behind another it moves in air disturbed by the car ahead, which lowers drag and lets it gain speed on the straight. This is the slipstream. Combined with DRS through 2025, it was the main way of closing in for a pass at the end of long straights."],
-      ["Attacking and defending", "An attacker positions the car to get a good run and pick the right braking point. A defender usually takes the inside line to cover the corner. Drivers are allowed one defensive move to change direction, and must not make additional moves as a rival is already alongside."],
-      ["Why some tracks are easier to overtake on", "Overtaking is easier on circuits with long straights followed by slow corners, such as Monza. It is difficult on narrow circuits with tight corners, like Monaco. Dirty air also matters, because a following car loses grip in medium-speed corners, which reduces its ability to stay close."],
-      ["Track position and wheel-to-wheel rules", "On tracks where passing is hard, being ahead is worth a lot, so strategy focuses on gaining position. Wheel-to-wheel rules require drivers to leave room: if the front of the attacking car is alongside the defender's car at the apex, the defender must leave space for it on the exit."]
-    ],
-    [
-      ["Where are most overtakes made?", "Braking zones", "Pit entry", "The start line", 0],
-      ["The apex is the...", "Innermost point of a corner", "Pit entry", "Finish line", 0],
-      ["Hardest circuit to overtake on?", "Monza", "Monaco", "Spa", 1]
-    ]
-  ),
-  M(
-    "strategy",
-    "🧠",
-    "Race Strategy",
-    [
-      ["One-stop and two-stop", "A one-stop strategy uses two sets of tyres and loses time in the pits only once, but the tyres must last longer. A two-stop strategy uses three sets, so the tyres are fresher and the car can push harder, but one more pit stop costs about 20 seconds. The better option depends on tyre wear at that circuit."],
-      ["Undercut and overcut", "An undercut means stopping before the car ahead, using fresh tyres to set quicker laps, and emerging in front after that car makes its stop. An overcut is the opposite: a driver stays out longer, often when tyres still perform well and the road is clear, and gains position after rivals pit."],
-      ["Tyre offset and pit windows", "A tyre offset occurs when two cars run different tyre ages or compounds. The car with fresher tyres is faster and can attack the other. A pit window is the range of laps in which stopping makes sense, given how quickly the tyres degrade."],
-      ["Safety Car, VSC and red flags", "A Safety Car or Virtual Safety Car slows the field, so a pit stop costs much less time than normal, and teams often pit under these conditions. Under a red flag the race stops and cars return to the pits, where tyres can be changed without any time penalty."],
-      ["Weather, traffic and pace management", "Rain changes the best tyre and often the order of the race. Traffic can ruin a pit stop if the driver rejoins behind slower cars. Pace management means driving slightly slower at times, to protect tyres or fuel, so the car can go faster later."],
-      ["Scenario: you are P4 and the leader pits", "If you stay out, you are trying to use a clear track and your current tyres to build a gap while the leader is on fresh tyres, so that when you pit you rejoin ahead of rivals. You also want to avoid losing time in traffic. The decision depends on your tyre condition and on the pace difference."]
-    ],
-    [
-      ["An undercut means...", "Pitting earlier than the rival", "Pitting later", "Never pitting", 0],
-      ["A Safety Car makes a stop...", "Cheaper", "More costly", "No different", 0],
-      ["Pace management is...", "Driving slower to save tyres or fuel", "Always driving flat out", "Skipping stops", 0]
-    ]
-  ),
-  M(
-    "flags",
-    "🚩",
-    "Flags, Rules and Penalties",
-    [
-      ["Green flag", "Shown at the start of a session and after a hazard has been cleared. It means the track is clear and racing can continue normally.", "#30d158"],
-      ["Yellow and double yellow", "A yellow flag warns of danger ahead, such as a stopped car. Drivers must slow down and cannot overtake in that section. A double yellow means the hazard is more serious and drivers must be prepared to stop.", "#ffd60a"],
-      ["Red flag", "A red flag stops the session because the track is unsafe, for example after a serious crash or heavy rain. All cars return to the pit lane, and the session restarts when it is safe.", "#e10600"],
-      ["Blue flag", "A blue flag tells a driver that a faster car is about to lap them. The slower driver must let that car pass at the first reasonable opportunity.", "#0a84ff"],
-      ["Black-and-white flag", "This flag is a warning to a driver for unsportsmanlike behaviour, such as blocking. It is shown together with the driver's number, and further offences can lead to penalties.", "linear-gradient(135deg,#fff 50%,#111 50%)"],
-      ["Chequered flag", "The chequered flag marks the end of a session or race. Drivers finish the lap they are on and return to the pits.", "repeating-conic-gradient(#fff 0 25%,#111 0 50%) 0 0/12px 12px"],
-      ["Safety Car and VSC", "The Safety Car leads the field at reduced speed while a hazard is cleared, and overtaking is not allowed. Under the Virtual Safety Car, no car leads the field. Instead, drivers must keep to a set minimum lap time, which slows everyone by a controlled amount."],
-      ["Track limits", "The edges of the track are marked by white lines. Drivers who put all four wheels beyond the line and gain an advantage can have lap times deleted, receive warnings, and eventually receive time penalties."],
-      ["Unsafe release and collisions", "An unsafe release happens when a car is let out of its pit box into the path of another car, or before it is safe. A driver found to have caused a collision is usually given a time penalty, and the size of the penalty reflects how much blame they carry."],
-      ["Types of penalty", "Time penalties, typically 5 or 10 seconds, are added to the driver's race time. Grid penalties move a driver back from the qualifying position, often after exceeding the permitted number of engine components. Pit-lane penalties include speeding in the pit lane. A driver who accumulates 12 penalty points within 12 months receives a one-race ban."]
-    ],
-    [
-      ["A blue flag means...", "Let the faster car by", "Danger", "Race over", 0],
-      ["Overtaking is banned under...", "Yellow flag", "Green flag", "Blue flag", 0],
-      ["Penalty points leading to a ban?", "6", "12", "20", 1]
-    ]
-  ),
-  M(
-    "driver",
-    "🧑‍🚀",
-    "The Driver",
-    [
-      ["Core driving skills", "A good F1 driver brakes precisely, finds the limit of grip in corners, and reacts quickly to changes such as a rival's attack. Consistency matters as much as raw speed: the ability to repeat fast laps without mistakes across a full race is what separates the best."],
-      ["Qualifying and race pace", "Qualifying pace is the speed a driver can produce over one lap with fresh tyres and a light car. Race pace is the speed they can maintain over a long stint, as fuel burns off and tyres wear. Some drivers are stronger at one than the other."],
-      ["Tyre management and wet weather", "Good tyre management means driving smoothly to avoid overheating or sliding the tyres, so they last longer. In wet conditions the grip is lower and changes constantly, so drivers must adjust their braking points, throttle application and racing line, and judge how much the track is drying."],
-      ["Feedback to engineers", "Drivers describe how the car feels, for example if the front does not turn in (understeer) or the rear slides (oversteer). Engineers combine this with data to adjust the setup. The precision of a driver's feedback directly affects how quickly the car is improved."],
-      ["Physical and mental demands", "Drivers experience up to about 5 g in corners and braking, which strains the neck and core, and they race in hot cockpits with heart rates that stay high for nearly two hours. They also make decisions at over 300 km/h while listening to radio messages and managing tyres, energy and rivals."],
-      ["Telemetry", "Telemetry is data sent from the car to the pit wall. The main channels are speed, throttle position, brake pressure, gear, engine rpm and steering angle. Overlaying two drivers' laps shows exactly where one brakes later, accelerates earlier or takes a different line, which reveals where time is gained or lost."]
-    ],
-    [
-      ["Understeer means the...", "Front loses grip", "Rear loses grip", "Engine overheats", 0],
-      ["Telemetry is...", "Data sent from the car", "A type of tyre", "A flag", 0],
-      ["Race pace is...", "Speed maintained over a stint", "A single lap", "Pit-stop time", 0]
-    ]
-  ),
-  M(
-    "team",
-    "🛠️",
-    "The Team Behind the Driver",
-    [
-      ["Race engineer", "The race engineer is the driver's main contact during a weekend. They communicate by radio, relay information about strategy and rivals, and work with the driver to adjust settings on the car. Drivers usually work with the same engineer for long periods, which builds trust and shared understanding."],
-      ["Performance engineers and strategists", "Performance engineers monitor data on the car, such as tyres, energy use and balance, to find improvements. The strategy team uses simulations to predict pit stop timing and race outcomes, and recommends calls such as pitting or staying out."],
-      ["Mechanics and the pit crew", "Mechanics assemble, maintain and repair the car throughout the weekend. During a pit stop about twenty crew members work together: some remove and fit wheels, others operate the jacks and adjust the front wing if needed. A well-drilled stop takes around two to three seconds."],
-      ["Factory and trackside", "Only a portion of a team travels to races. Back at the factory, hundreds of engineers work in aerodynamics, vehicle dynamics and power unit departments, designing new parts, testing them in wind tunnels and running simulators to support the trackside team."]
-    ],
-    [
-      ["The driver's primary contact is...", "Race engineer", "Pit stop jackman", "Wind tunnel operator", 0],
-      ["A typical pit stop duration is...", "2-3 seconds", "10 seconds", "1 minute", 0],
-      ["Most team staff work...", "At the factory", "At the track", "Remotely from home", 0]
-    ]
-  )
+M("car","🔧","The F1 Car",[
+["Front wing","The front wing is the first part of the car to meet the air. It generates downforce on the front axle and, equally important, directs airflow around the front tyres and towards the rest of the car. The quality of the airflow it sends backwards strongly affects how well the floor and rear wing work."],
+["Rear wing","The rear wing produces downforce at the back of the car, helping the rear tyres grip during acceleration and cornering. It also contains the movable flap used by the Drag Reduction System. The angle of the wing is chosen for each circuit, steeper for grip and flatter for straight-line speed."],
+["Floor and diffuser","The floor generates the largest share of a modern F1 car's downforce. Tunnels underneath it accelerate the air, which lowers its pressure and pulls the car towards the ground. The diffuser is the upward-curving section at the rear of the floor that lets this fast air expand smoothly back to normal speed."],
+["Sidepods and halo","The sidepods sit alongside the driver and hold the radiators that cool the power unit, and their shape guides air towards the rear of the car. The halo is a titanium structure above the cockpit that protects the driver's head from impacts and debris, and it has prevented serious injuries in several crashes."],
+["Suspension, tyres and brakes","The suspension connects the wheels to the car and keeps the floor at the correct height above the track, which is crucial for aerodynamics. Tyres are the only contact with the road. Carbon brakes can reach around 1,000°C and can stop the car from about 300 km/h in roughly four seconds."],
+["Steering wheel","The steering wheel works as a control panel. Drivers use its buttons, rotary switches and screen to talk to the team, adjust brake balance, change how the power unit uses its electrical energy and alter differential settings. They often change these during a single lap."],
+["Downforce and drag","Downforce is aerodynamic force that pushes the car into the track, giving the tyres more grip so it can corner faster. Drag is air resistance that slows the car on straights. Both grow with the square of speed, and wings that add downforce also add drag, so teams balance grip against top speed for each circuit."],
+["Ground effect and dirty air","Ground effect is the suction produced by the tunnels under the floor. Dirty air is the turbulent wake left behind a car, which reduces the downforce of a car following closely and makes overtaking difficult. Since 2022, cars rely more on ground effect so that following another car costs less grip."],
+["DRS","The Drag Reduction System, used from 2011 to 2025, allowed a driver within one second of the car ahead to open a flap on the rear wing in designated zones. Opening it reduced drag and increased speed on the straight, making a pass more likely. For 2026 it is replaced by active aerodynamics, where the wings change between cornering and straight-line modes."]],
+[["Wings mainly provide...","Cooling","Downforce","Power",1],["Ground effect comes from...","Tunnels under the floor","A bigger engine","The halo",0],["Dirty air affects the car...","In front","Behind","Both equally",1]]),
+
+M("pu","⚡","The Power Unit",[
+["The internal combustion engine","The core of the power unit is a 1.6-litre turbocharged V6 petrol engine that revs up to about 15,000 rpm. It burns fuel to drive the wheels, and on its own it produces around 800 horsepower. The remaining output, taking the total above 1,000 horsepower, comes from the electrical systems."],
+["The turbocharger","The turbocharger uses exhaust gases to spin a turbine, which drives a compressor that forces extra air into the engine. More air allows more fuel to be burned in each cycle, which increases power without increasing engine size. Its energy comes from exhaust heat that would otherwise be wasted."],
+["MGU-K","The Motor Generator Unit – Kinetic is connected to the drivetrain. When the car brakes it works as a generator and converts some of the car's motion into electricity, and on acceleration it works as a motor, delivering that stored energy as extra power to the wheels. Through 2025 it could add about 120 kW, around 160 horsepower."],
+["MGU-H","The Motor Generator Unit – Heat was connected to the turbocharger. It turned exhaust heat energy into electricity, and it could also spin the turbo to eliminate lag. It was technically complex and expensive, and the MGU-H has been removed from the regulations for 2026."],
+["Energy Store and ERS","The Energy Store is the battery that stores electricity harvested by the MGU-K and MGU-H. The Energy Recovery System, or ERS, is the term for the whole arrangement: the two motor generators, the battery and the electronics. Drivers have a limited amount of energy they may recover and deploy each lap, so using it wisely matters."],
+["Why hybrid, and why suppliers matter","Hybrid systems turn energy that would be lost into speed, making F1 engines over 50% thermally efficient, much higher than a road car. Only a few manufacturers build power units, such as Mercedes, Ferrari, Honda, Audi and Red Bull-Ford, and many teams buy theirs. Because the power unit strongly affects performance, a team's supplier is a major advantage or limitation. The 2026 rules shift much more of the power to electrical energy."]],
+[["The MGU-K recovers...","Braking energy","Exhaust heat","Fuel",0],["The turbo is driven by...","Exhaust gas","The battery","The wheels",0],["F1 uses hybrid power units to...","Improve efficiency and recover energy","Reduce safety","Lower speed",0]]),
+
+M("tyres","🛞","Tyres",[
+["Soft, Medium and Hard","For dry running there are slick tyres (no tread) in several compounds, and the three used in each race are marked with red for Soft, yellow for Medium and white for Hard. The softer the compound, the more grip it gives and the faster it wears. Harder compounds last longer but are slower over a single lap."],
+["Intermediate and full wet tyres","Intermediate tyres, marked green, have shallow grooves and are used on damp or drying tracks. Full wet tyres, marked blue, have deep grooves that displace large amounts of water and are used in heavy rain. Both are slower than slicks on a dry track and overheat quickly if the track dries."],
+["Temperature and grip","A tyre works best in a narrow temperature range. If it is too cold it cannot grip properly, and if it is too hot it slides and wears faster. Drivers and teams constantly manage tyre temperature with throttle, braking, steering inputs and how hard they push."],
+["Degradation, graining and blistering","Degradation is the gradual loss of grip as a tyre wears. Graining happens when a tyre slides and small rolls of rubber tear off and stick to its surface, reducing grip. Blistering happens when the inside of the tyre overheats, which causes bubbles and chunks to appear on the surface."],
+["Why not always use the softest tyre?","Soft tyres are fastest for a few laps but wear out quickly, so they would need many pit stops. In a dry race, drivers must also use at least two different compounds. The best plan over the whole race is therefore rarely the same as the plan for the fastest single lap."],
+["Pit stops","During a pit stop, the crew changes all four tyres while the car is stationary, which takes about two to three seconds. Including driving through the pit lane at the speed limit, a stop costs roughly 20 to 25 seconds compared with staying on track. Teams decide when to stop by weighing that time loss against the pace gained from fresh tyres."]],
+[["A yellow-marked tyre is the...","Soft","Medium","Hard",1],["Blistering is caused by...","Cold tyres","Overheating","Rain",1],["Minimum dry compounds in a race?","One","Two","Three",1]]),
+
+M("racing","⚔️","Racing and Overtaking",[
+["Racing line and apex","The racing line is the fastest path through a corner. Drivers approach wide, turn in towards the apex, the innermost point of the corner, and then run wide again on exit. Usually the exit matters most, because speed carried out of a corner continues along the straight that follows."],
+["Braking zones","Braking zones are where most overtakes happen. A driver can brake slightly later than the car in front and move alongside before the corner. However, braking too late means missing the corner, so the attacker must judge whether the move can be completed."],
+["Slipstream and DRS","When a car travels closely behind another it moves in air disturbed by the car ahead, which lowers drag and lets it gain speed on the straight. This is the slipstream. Combined with DRS through 2025, it was the main way of closing in for a pass at the end of long straights."],
+["Attacking and defending","An attacker positions the car to get a good run and pick the right braking point. A defender usually takes the inside line to cover the corner. Drivers are allowed one defensive move to change direction, and must not make additional moves as a rival is already alongside."],
+["Why some tracks are easier to overtake on","Overtaking is easier on circuits with long straights followed by slow corners, such as Monza. It is difficult on narrow circuits with tight corners, like Monaco. Dirty air also matters, because a following car loses grip in medium-speed corners, which reduces its ability to stay close."],
+["Track position and wheel-to-wheel rules","On tracks where passing is hard, being ahead is worth a lot, so strategy focuses on gaining position. Wheel-to-wheel rules require drivers to leave room: if the front of the attacking car is alongside the defender's car at the apex, the defender must leave space for it on the exit."]],
+[["Where are most overtakes made?","Braking zones","Pit entry","The start line",0],["The apex is the...","Innermost point of a corner","Pit entry","Finish line",0],["Hardest circuit to overtake on?","Monza","Monaco","Spa",1]]),
+
+M("strategy","🧠","Race Strategy",[
+["One-stop and two-stop","A one-stop strategy uses two sets of tyres and loses time in the pits only once, but the tyres must last longer. A two-stop strategy uses three sets, so the tyres are fresher and the car can push harder, but one more pit stop costs about 20 seconds. The better option depends on tyre wear at that circuit."],
+["Undercut and overcut","An undercut means stopping before the car ahead, using fresh tyres to set quicker laps, and emerging in front after that car makes its stop. An overcut is the opposite: a driver stays out longer, often when tyres still perform well and the road is clear, and gains position after rivals pit."],
+["Tyre offset and pit windows","A tyre offset occurs when two cars run different tyre ages or compounds. The car with fresher tyres is faster and can attack the other. A pit window is the range of laps in which stopping makes sense, given how quickly the tyres degrade."],
+["Safety Car, VSC and red flags","A Safety Car or Virtual Safety Car slows the field, so a pit stop costs much less time than normal, and teams often pit under these conditions. Under a red flag the race stops and cars return to the pits, where tyres can be changed without any time penalty."],
+["Weather, traffic and pace management","Rain changes the best tyre and often the order of the race. Traffic can ruin a pit stop if the driver rejoins behind slower cars. Pace management means driving slightly slower at times, to protect tyres or fuel, so the car can go faster later."],
+["Scenario: you are P4 and the leader pits","If you stay out, you are trying to use a clear track and your current tyres to build a gap while the leader is on fresh tyres, so that when you pit you rejoin ahead of rivals. You also want to avoid losing time in traffic. The decision depends on your tyre condition and on the pace difference."]],
+[["An undercut means...","Pitting earlier than the rival","Pitting later","Never pitting",0],["A Safety Car makes a stop...","Cheaper","More costly","No different",0],["Pace management is...","Driving slower to save tyres or fuel","Always driving flat out","Skipping stops",0]]),
+
+M("flags","🚩","Flags, Rules and Penalties",[
+["Green flag","Shown at the start of a session and after a hazard has been cleared. It means the track is clear and racing can continue normally.","#30d158"],
+["Yellow and double yellow","A yellow flag warns of danger ahead, such as a stopped car. Drivers must slow down and cannot overtake in that section. A double yellow means the hazard is more serious and drivers must be prepared to stop.","#ffd60a"],
+["Red flag","A red flag stops the session because the track is unsafe, for example after a serious crash or heavy rain. All cars return to the pit lane, and the session restarts when it is safe.","#e10600"],
+["Blue flag","A blue flag tells a driver that a faster car is about to lap them. The slower driver must let that car pass at the first reasonable opportunity.","#0a84ff"],
+["Black-and-white flag","This flag is a warning to a driver for unsportsmanlike behaviour, such as blocking. It is shown together with the driver's number, and further offences can lead to penalties.","linear-gradient(135deg,#fff 50%,#111 50%)"],
+["Chequered flag","The chequered flag marks the end of a session or race. Drivers finish the lap they are on and return to the pits.","repeating-conic-gradient(#fff 0 25%,#111 0 50%) 0 0/12px 12px"],
+["Safety Car and VSC","The Safety Car leads the field at reduced speed while a hazard is cleared, and overtaking is not allowed. Under the Virtual Safety Car, no car leads the field. Instead, drivers must keep to a set minimum lap time, which slows everyone by a controlled amount."],
+["Track limits","The edges of the track are marked by white lines. Drivers who put all four wheels beyond the line and gain an advantage can have lap times deleted, receive warnings, and eventually receive time penalties."],
+["Unsafe release and collisions","An unsafe release happens when a car is let out of its pit box into the path of another car, or before it is safe. A driver found to have caused a collision is usually given a time penalty, and the size of the penalty reflects how much blame they carry."],
+["Types of penalty","Time penalties, typically 5 or 10 seconds, are added to the driver's race time. Grid penalties move a driver back from the qualifying position, often after exceeding the permitted number of engine components. Pit-lane penalties include speeding in the pit lane. A driver who accumulates 12 penalty points within 12 months receives a one-race ban."]],
+[["A blue flag means...","Let the faster car by","Danger","Race over",0],["Overtaking is banned under...","Yellow flag","Green flag","Blue flag",0],["Penalty points leading to a ban?","6","12","20",1]]),
+
+M("driver","🧑‍🚀","The Driver",[
+["Core driving skills","A good F1 driver brakes precisely, finds the limit of grip in corners, and reacts quickly to changes such as a rival's attack. Consistency matters as much as raw speed: the ability to repeat fast laps without mistakes across a full race is what separates the best."],
+["Qualifying and race pace","Qualifying pace is the speed a driver can produce over one lap with fresh tyres and a light car. Race pace is the speed they can maintain over a long stint, as fuel burns off and tyres wear. Some drivers are stronger at one than the other."],
+["Tyre management and wet weather","Good tyre management means driving smoothly to avoid overheating or sliding the tyres, so they last longer. In wet conditions the grip is lower and changes constantly, so drivers must adjust their braking points, throttle application and racing line, and judge how much the track is drying."],
+["Feedback to engineers","Drivers describe how the car feels, for example if the front does not turn in (understeer) or the rear slides (oversteer). Engineers combine this with data to adjust the setup. The precision of a driver's feedback directly affects how quickly the car is improved."],
+["Physical and mental demands","Drivers experience up to about 5 g in corners and braking, which strains the neck and core, and they race in hot cockpits with heart rates that stay high for nearly two hours. They also make decisions at over 300 km/h while listening to radio messages and managing tyres, energy and rivals."],
+["Telemetry","Telemetry is data sent from the car to the pit wall. The main channels are speed, throttle position, brake pressure, gear, engine rpm and steering angle. Overlaying two drivers' laps shows exactly where one brakes later, accelerates earlier or takes a different line, which reveals where time is gained or lost."]],
+[["Understeer means the...","Front loses grip","Rear loses grip","Engine overheats",0],["Telemetry is...","Data sent from the car","A type of tyre","A flag",0],["Race pace is...","Speed maintained over a stint","A single lap","Pit-stop time",0]]),
+
+M("team","🛠️","The Team Behind the Driver",[
+["Race engineer","The race engineer is the driver's main contact during a weekend. They communicate by radio, relay information about strategy and rivals, and work with the driver to adjust settings on the car. Drivers usually work with the same engineer for long periods, which builds trust and shared understanding."],
+["Performance engineers and strategists","Performance engineers monitor data on the car, such as tyres, energy use and balance, to find improvements. The strategy team uses simulations to predict pit stop timing and race outcomes, and recommends calls such as pitting or staying out."],
+["Mechanics and the pit crew","Mechanics assemble, maintain and repair the car throughout the weekend. During a pit stop about twenty crew members work together: some remove and fit wheels, others operate the jacks and adjust the front wing if needed. A well-drilled stop takes around two to three seconds."],
+["Factory and trackside","Only a portion of a team travels to races. Back at the factory, hundreds of engineers work in aerodynamics, vehicle dynamics and power unit departments, designing upgrades and analysing data, often in real time. Trackside staff apply that work in race conditions."],
+["Team principal","The team principal leads the whole organisation. They set the overall direction, make key decisions with senior engineers, manage relations with the sport's governing bodies and other teams, and represent the team to the media."],
+["The chain of command","Information moves from driver to race engineer, then to the strategy group and the pit wall, where decisions are made. The decision is then passed back along the same chain to the driver by radio. Understanding this chain helps explain what you hear in team radio."]],
+[["Who speaks to the driver by radio?","The race engineer","A marshal","A steward",0],["Roughly how many crew work a pit stop?","5","20","100",1],["Who leads the team?","The team principal","The steward","The marshal",0]]),
+
+M("champ","🏆","Championships and Constructors",[
+["The two titles","The Drivers' Championship rewards the driver with the most points at the end of the season. The Constructors' Championship rewards the team with the most combined points from its two drivers. Both are decided using the same points system."],
+["Points system","In a Grand Prix, the top ten finishers score 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1 points. In a Sprint race the top eight score 8, 7, 6, 5, 4, 3, 2 and 1. There is no longer a point for fastest lap."],
+["Ties","If drivers finish on equal points, the championship goes to the driver with more race wins. If they are still level, second places are compared, then third places, and so on."],
+["Why every position matters","Points are awarded down to tenth place, so a consistent run of points finishes can outweigh one win with several retirements. For teams, finishing one place higher in the Constructors' standings increases their share of the sport's prize money."],
+["Teammate comparisons","Since teammates race the same car, their results are a direct comparison of driver performance. Qualifying gaps and race finishes against a teammate are often used to judge how strong a driver is."],
+["Famous championship battles","In 1976 James Hunt beat Niki Lauda by a single point. Ayrton Senna and Alain Prost's rivalry defined 1988 to 1990. Nico Rosberg beat Lewis Hamilton in 2016, and in 2021 Max Verstappen took the title from Hamilton on the final lap of the final race in Abu Dhabi."]],
+[["Points for a win?","10","25","50",1],["Ties are settled by...","Most wins","A coin toss","Age",0],["Constructors' position affects...","Prize money","Nothing","Tyre choice",0]]),
+
+M("circuits","🗺️","F1 Circuits",[
+["Track vocabulary","A straight is a long flat section where cars reach top speed. A hairpin is a very tight, near 180-degree turn. A chicane is a quick left-right or right-left sequence. Esses are a flowing series of alternating bends. High-speed corners depend on downforce, while low-speed corners depend on traction and braking."],
+["DRS zones","A DRS zone was a designated straight where a chasing driver within one second could open the rear wing flap. Circuits typically had one to three zones, placed after slower corners so that drivers could close up, then pass before braking for the next corner."],
+["Speed and power: Monza and Spa","Monza in Italy has long straights joined by chicanes, so teams run very low-drag wings to maximise top speed. Spa-Francorchamps in Belgium is the longest circuit, with big elevation changes, the fast Eau Rouge and Raidillon complex, and unpredictable weather."],
+["Street circuits: Monaco, Singapore and Baku","Street circuits run through city roads with walls close to the track. Monaco is narrow and slow, making qualifying extremely important. Singapore is a hot, humid night race. Baku combines a very long straight with a tight old-town section, which gives it unusual strategy and passing chances."],
+["Downforce and technical circuits: Hungary and Suzuka","The Hungaroring is tight and twisty, so teams run maximum downforce, and overtaking is difficult. Suzuka in Japan is a technical layout shaped like a figure eight, where fast esses reward smooth driving and punish small errors."]],
+[["Low-drag wings suit...","Monza","Monaco","Hungary",0],["A hairpin is a...","Very tight corner","Long straight","Pit lane",0],["Where is qualifying most important?","Monaco","Monza","Spa",0]])
 ];
-
-/* --- State Management --- */
-let state = {
-  activeModuleIndex: 0,
-  cardIndex: 0,
-  inQuiz: false,
-  quizIndex: 0,
-  score: 0,
-  xp: parseInt(localStorage.getItem('f1_xp') || '0', 10),
-  completedModules: JSON.parse(localStorage.getItem('f1_completed') || '[]')
-};
-
-function saveState() {
-  localStorage.setItem('f1_xp', state.xp);
-  localStorage.setItem('f1_completed', JSON.stringify(state.completedModules));
-}
-
-function getRank(xp) {
-  if (xp < 50) return "Rookie";
-  if (xp < 150) return "Reserve Driver";
-  if (xp < 300) return "F1 Driver";
-  if (xp < 500) return "Race Winner";
-  return "World Champion";
-}
-
-function updateHeader() {
-  const xpEl = document.getElementById("xp");
-  const rankEl = document.getElementById("rank");
-  if (xpEl) xpEl.textContent = `${state.xp} XP`;
-  if (rankEl) rankEl.textContent = getRank(state.xp);
-}
-
-function renderSidebar() {
-  const nav = document.getElementById("nav");
-  if (!nav) return;
-  nav.innerHTML = "";
-
-  MODULES.forEach((mod, idx) => {
-    const btn = document.createElement("button");
-    btn.className = `nav-btn ${idx === state.activeModuleIndex ? "active" : ""}`;
-    const isDone = state.completedModules.includes(mod.id);
-    btn.innerHTML = `<span class="icon">${mod.icon}</span> <span class="title">${mod.title}</span> ${isDone ? '<span class="check">✓</span>' : ''}`;
-    btn.onclick = () => selectModule(idx);
-    nav.appendChild(btn);
-  });
-}
-
-function selectModule(index) {
-  state.activeModuleIndex = index;
-  state.cardIndex = 0;
-  state.inQuiz = false;
-  state.quizIndex = 0;
-  state.score = 0;
-  renderSidebar();
-  renderContent();
-}
-
-function renderContent() {
-  const main = document.getElementById("content");
-  if (!main) return;
-
-  const mod = MODULES[state.activeModuleIndex];
-
-  if (!state.inQuiz) {
-    const card = mod.cards[state.cardIndex];
-    const isFlag = card.length === 3;
-    const styleAttr = isFlag ? `style="background: ${card[2]};"` : "";
-
-    main.innerHTML = `
-      <div class="card-container">
-        <div class="card-header">
-          <h2>${mod.icon} ${mod.title}</h2>
-          <span class="card-counter">Card ${state.cardIndex + 1} of ${mod.cards.length}</span>
-        </div>
-        <div class="card-body" ${styleAttr}>
-          <h3>${card[0]}</h3>
-          <p>${card[1]}</p>
-        </div>
-        <div class="card-actions">
-          <button id="prev-card" ${state.cardIndex === 0 ? "disabled" : ""}>Previous</button>
-          <button id="next-card">${state.cardIndex < mod.cards.length - 1 ? "Next" : "Take Quiz 📝"}</button>
-        </div>
-      </div>
-    `;
-
-    document.getElementById("prev-card")?.addEventListener("click", () => {
-      if (state.cardIndex > 0) {
-        state.cardIndex--;
-        renderContent();
-      }
-    });
-
-    document.getElementById("next-card")?.addEventListener("click", () => {
-      if (state.cardIndex < mod.cards.length - 1) {
-        state.cardIndex++;
-        renderContent();
-      } else {
-        state.inQuiz = true;
-        state.quizIndex = 0;
-        state.score = 0;
-        renderContent();
-      }
-    });
-  } else {
-    if (state.quizIndex < mod.quiz.length) {
-      const q = mod.quiz[state.quizIndex];
-      const questionText = q[0];
-      const options = q.slice(1, -1);
-      const correctIdx = q[q.length - 1];
-
-      main.innerHTML = `
-        <div class="quiz-container">
-          <div class="card-header">
-            <h2>📝 ${mod.title} — Quiz</h2>
-            <span class="card-counter">Question ${state.quizIndex + 1} of ${mod.quiz.length}</span>
-          </div>
-          <div class="quiz-body">
-            <h3>${questionText}</h3>
-            <div class="quiz-options">
-              ${options.map((opt, i) => `<button class="opt-btn" data-index="${i}">${opt}</button>`).join("")}
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.querySelectorAll(".opt-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          const selected = parseInt(e.target.getAttribute("data-index"), 10);
-          if (selected === correctIdx) {
-            state.score++;
-          }
-          state.quizIndex++;
-          renderContent();
-        });
-      });
-    } else {
-      const passed = state.score === mod.quiz.length;
-      if (passed && !state.completedModules.includes(mod.id)) {
-        state.completedModules.push(mod.id);
-        state.xp += 20;
-        saveState();
-        updateHeader();
-        renderSidebar();
-      }
-
-      main.innerHTML = `
-        <div class="quiz-results">
-          <h2>Quiz Completed!</h2>
-          <p>You scored <strong>${state.score} / ${mod.quiz.length}</strong></p>
-          <p>${passed ? "🎉 Great job! You passed this module and earned 20 XP!" : "Keep learning! Review the cards and try again."}</p>
-          <button id="restart-btn">${passed ? "Review Lessons" : "Try Again"}</button>
-          ${
-            state.activeModuleIndex < MODULES.length - 1 && passed
-              ? `<button id="next-mod-btn">Next Module ➔</button>`
-              : ""
-          }
-        </div>
-      `;
-
-      document.getElementById("restart-btn")?.addEventListener("click", () => {
-        state.inQuiz = false;
-        state.cardIndex = 0;
-        renderContent();
-      });
-
-      document.getElementById("next-mod-btn")?.addEventListener("click", () => {
-        selectModule(state.activeModuleIndex + 1);
-      });
-    }
-  }
-}
-
-// Execute app init
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    updateHeader();
-    renderSidebar();
-    renderContent();
-  });
-} else {
-  updateHeader();
-  renderSidebar();
-  renderContent();
-}
+const RANKS=[[0,"Rookie"],[100,"Backmarker"],[220,"Points Finisher"],[360,"Podium Regular"],[500,"Race Engineer"],[650,"Strategy Genius"]];
+let S=JSON.parse(localStorage.getItem("f1guide2")||'{"d":{}}'),cur=null,step=0,mode="",qi=0,sc=0;
+const $=id=>document.getElementById(id),save=()=>localStorage.setItem("f1guide2",JSON.stringify(S));
+const pts=id=>{const d=S.d[id]||{};return (d.l?20:0)+(d.q||0)*15};
+const xp=()=>MODULES.reduce((a,m)=>a+pts(m.id),0);
+function hud(){const x=xp();let r="";RANKS.forEach(k=>{if(x>=k[0])r=k[1]});
+ $("rank").textContent=r;$("xp").textContent=x+" XP";$("xpbar").style.width=Math.min(100,x/780*100)+"%";
+ $("nav").innerHTML=`<button class="${cur===null?"on":""}" onclick="home()">🏠 Start Here</button>`+MODULES.map((m,i)=>`<button class="${cur===i?"on":""} ${S.d[m.id]&&S.d[m.id].q!=null?"done":""}" onclick="lesson(${i})">${m.icon} ${i+1}. ${m.title}<small>${S.d[m.id]&&S.d[m.id].q!=null?"✔ "+S.d[m.id].q+"/3":""}</small></button>`).join("")}
+function home(){cur=null;mode="";hud();$("main").innerHTML=`<div class="hero"><h1>From "cool cars" to <em>crying over pit strategy</em>.</h1><p>12 modules. Swipe through bite-size cards, then beat the quiz. Earn XP, climb the ranks.</p><button class="btn" onclick="lesson(0)">LIGHTS OUT →</button></div><div class="tiles">${MODULES.map((m,i)=>`<button class="tile" onclick="lesson(${i})"><span style="font-size:28px">${m.icon}</span><b>${i+1}. ${m.title}</b></button>`).join("")}</div>`}
+function lesson(i,s){cur=i;step=s||0;mode="l";hud();draw()}
+function draw(){const m=MODULES[cur],c=m.cards[step],n=m.cards.length;
+ $("main").innerHTML=`<div class="lp">${m.cards.map((_,k)=>`<i class="${k<=step?"on":""}"></i>`).join("")}</div><div class="slide">${c[2]?`<div class="sw" style="background:${c[2]}"></div>`:""}<small>${m.icon} ${m.title.toUpperCase()} · ${step+1}/${n}</small><h2>${c[0]}</h2><p>${c[1]}</p></div><div class="row"><button class="btn ghost" onclick="back()" ${step?"":"style='visibility:hidden'"}>← BACK</button><button class="btn" onclick="next()">${step===n-1?"START QUIZ →":"CONTINUE →"}</button></div>`;scrollTo(0,0)}
+function back(){if(step>0){step--;draw()}}
+function next(){const m=MODULES[cur];if(step<m.cards.length-1){step++;draw()}else{S.d[m.id]=S.d[m.id]||{};S.d[m.id].l=1;save();hud();qi=0;sc=0;mode="q";quiz()}}
+function quiz(){const m=MODULES[cur],q=m.quiz[qi];
+ $("main").innerHTML=`<div class="lp">${m.quiz.map((_,k)=>`<i class="${k<=qi?"on":""}"></i>`).join("")}</div><div class="slide"><small>QUIZ · ${qi+1}/${m.quiz.length}</small><h2>${q[0]}</h2>${q.slice(1,4).map((o,k)=>`<button class="opt" onclick="ans(${k},this)">${o}</button>`).join("")}<div id="fb" class="why"></div></div><div class="row"><span></span><button id="nb" class="btn" style="display:none" onclick="nextQ()">CONTINUE →</button></div>`}
+function ans(k,b){if($("nb").style.display==="inline-block")return;const q=MODULES[cur].quiz[qi];
+ document.querySelectorAll(".opt").forEach((o,j)=>{if(j===q[4])o.classList.add("ok")});
+ if(k===q[4]){sc++;$("fb").textContent="Lights to green. ✅"}else{b.classList.add("no");$("fb").textContent="Box box. Review and retry. ❌"}
+ $("nb").style.display="inline-block"}
+function nextQ(){const m=MODULES[cur];qi++;if(qi<m.quiz.length)return quiz();
+ const d=S.d[m.id];d.q=Math.max(d.q||0,sc);save();hud();
+ $("main").innerHTML=`<div class="slide"><small>RESULT</small><h2 class="score">${sc}/${m.quiz.length}</h2><p>${sc===m.quiz.length?"P1. Clinical.":"Re-read the cards and go again."}</p></div><div class="row"><button class="btn ghost" onclick="lesson(${cur})">RE-READ</button><button class="btn" onclick="${cur+1<MODULES.length?"lesson("+(cur+1)+")":"home()"}">${cur+1<MODULES.length?"NEXT MODULE →":"HOME"}</button></div>`}
+document.addEventListener("keydown",e=>{if(mode!=="l")return;if(e.key==="ArrowRight"||e.key==="Enter")next();if(e.key==="ArrowLeft")back()});
+home();

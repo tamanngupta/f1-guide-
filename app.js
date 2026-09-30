@@ -190,3 +190,185 @@ const MODULES = [
     ]
   )
 ];
+
+/* --- UI Logic Engine --- */
+
+let state = {
+  activeModuleIndex: 0,
+  cardIndex: 0,
+  inQuiz: false,
+  quizIndex: 0,
+  score: 0,
+  xp: parseInt(localStorage.getItem('f1_xp') || '0', 10),
+  completedModules: JSON.parse(localStorage.getItem('f1_completed') || '[]')
+};
+
+function saveState() {
+  localStorage.setItem('f1_xp', state.xp);
+  localStorage.setItem('f1_completed', JSON.stringify(state.completedModules));
+}
+
+function getRank(xp) {
+  if (xp < 50) return "Rookie";
+  if (xp < 150) return "Reserve Driver";
+  if (xp < 300) return "F1 Driver";
+  if (xp < 500) return "Race Winner";
+  return "World Champion";
+}
+
+function updateHeader() {
+  const xpEl = document.getElementById("xp-count");
+  const rankEl = document.getElementById("rank-title");
+  if (xpEl) xpEl.textContent = `${state.xp} XP`;
+  if (rankEl) rankEl.textContent = getRank(state.xp);
+}
+
+function renderSidebar() {
+  const nav = document.getElementById("module-nav");
+  if (!nav) return;
+  nav.innerHTML = "";
+
+  MODULES.forEach((mod, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `nav-btn ${idx === state.activeModuleIndex ? "active" : ""}`;
+    const isDone = state.completedModules.includes(mod.id);
+    btn.innerHTML = `<span class="icon">${mod.icon}</span> <span class="title">${mod.title}</span> ${isDone ? '<span class="check">✓</span>' : ''}`;
+    btn.onclick = () => selectModule(idx);
+    nav.appendChild(btn);
+  });
+}
+
+function selectModule(index) {
+  state.activeModuleIndex = index;
+  state.cardIndex = 0;
+  state.inQuiz = false;
+  state.quizIndex = 0;
+  state.score = 0;
+  renderSidebar();
+  renderContent();
+}
+
+function renderContent() {
+  const main = document.getElementById("main-content");
+  if (!main) return;
+
+  const mod = MODULES[state.activeModuleIndex];
+
+  if (!state.inQuiz) {
+    // Render Card Lesson
+    const card = mod.cards[state.cardIndex];
+    const isFlag = card.length === 3; // Flag modules may pass color/gradient styles
+    const styleAttr = isFlag ? `style="background: ${card[2]};"` : "";
+
+    main.innerHTML = `
+      <div class="card-container">
+        <div class="card-header">
+          <h2>${mod.icon} ${mod.title}</h2>
+          <span class="card-counter">Card ${state.cardIndex + 1} of ${mod.cards.length}</span>
+        </div>
+        <div class="card-body" ${styleAttr}>
+          <h3>${card[0]}</h3>
+          <p>${card[1]}</p>
+        </div>
+        <div class="card-actions">
+          <button id="prev-card" ${state.cardIndex === 0 ? "disabled" : ""}>Previous</button>
+          <button id="next-card">${state.cardIndex < mod.cards.length - 1 ? "Next" : "Take Quiz 📝"}</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("prev-card")?.addEventListener("click", () => {
+      if (state.cardIndex > 0) {
+        state.cardIndex--;
+        renderContent();
+      }
+    });
+
+    document.getElementById("next-card")?.addEventListener("click", () => {
+      if (state.cardIndex < mod.cards.length - 1) {
+        state.cardIndex++;
+        renderContent();
+      } else {
+        state.inQuiz = true;
+        state.quizIndex = 0;
+        state.score = 0;
+        renderContent();
+      }
+    });
+  } else {
+    // Render Quiz Question or Completion
+    if (state.quizIndex < mod.quiz.length) {
+      const q = mod.quiz[state.quizIndex];
+      const questionText = q[0];
+      const options = q.slice(1, -1);
+      const correctIdx = q[q.length - 1];
+
+      main.innerHTML = `
+        <div class="quiz-container">
+          <div class="card-header">
+            <h2>📝 ${mod.title} — Quiz</h2>
+            <span class="card-counter">Question ${state.quizIndex + 1} of ${mod.quiz.length}</span>
+          </div>
+          <div class="quiz-body">
+            <h3>${questionText}</h3>
+            <div class="quiz-options">
+              ${options.map((opt, i) => `<button class="opt-btn" data-index="${i}">${opt}</button>`).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.querySelectorAll(".opt-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const selected = parseInt(e.target.getAttribute("data-index"), 10);
+          if (selected === correctIdx) {
+            state.score++;
+          }
+          state.quizIndex++;
+          renderContent();
+        });
+      });
+    } else {
+      // Quiz Finished
+      const passed = state.score === mod.quiz.length;
+      if (passed && !state.completedModules.includes(mod.id)) {
+        state.completedModules.push(mod.id);
+        state.xp += 20;
+        saveState();
+        updateHeader();
+        renderSidebar();
+      }
+
+      main.innerHTML = `
+        <div class="quiz-results">
+          <h2>Quiz Completed!</h2>
+          <p>You scored <strong>${state.score} / ${mod.quiz.length}</strong></p>
+          <p>${passed ? "🎉 Great job! You passed this module and earned 20 XP!" : "Keep learning! Review the cards and try again."}</p>
+          <button id="restart-btn">${passed ? "Review Lessons" : "Try Again"}</button>
+          ${
+            state.activeModuleIndex < MODULES.length - 1 && passed
+              ? `<button id="next-mod-btn">Next Module ➔</button>`
+              : ""
+          }
+        </div>
+      `;
+
+      document.getElementById("restart-btn")?.addEventListener("click", () => {
+        state.inQuiz = false;
+        state.cardIndex = 0;
+        renderContent();
+      });
+
+      document.getElementById("next-mod-btn")?.addEventListener("click", () => {
+        selectModule(state.activeModuleIndex + 1);
+      });
+    }
+  }
+}
+
+// Initialize application on load
+window.addEventListener("DOMContentLoaded", () => {
+  updateHeader();
+  renderSidebar();
+  renderContent();
+});

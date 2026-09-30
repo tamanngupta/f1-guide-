@@ -31,3 +31,16 @@ h1,h2,h3{font-family:Orbitron}
 .why{font-size:14px;color:var(--dim);margin-top:6px}
 .score{font:900 34px Orbitron;color:var(--red)}
 @media(max-width:800px){.layout{grid-template-columns:1fr}nav{position:static;flex-direction:row;overflow-x:auto}nav button{white-space:nowrap}.bar{width:60px}}
+/* --- card-lesson mode --- */
+.lp{display:flex;gap:6px;margin-bottom:18px}.lp i{flex:1;height:7px;border-radius:9px;background:var(--line);transition:.3s}.lp i.on{background:var(--red)}
+.slide{min-height:300px;padding:34px 28px;border-radius:22px;background:linear-gradient(160deg,#1c1c22,#101014);border:1px solid var(--line);animation:in .35s ease;position:relative;overflow:hidden}
+.slide:before{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(#e1060044,transparent 70%)}
+@keyframes in{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.slide small{color:var(--red);font:700 12px Orbitron;letter-spacing:2px}
+.slide h2{font-size:clamp(22px,4vw,32px);margin:10px 0 14px}.slide p{font-size:18px;max-width:640px}
+.sw{width:60px;height:40px;border-radius:6px;margin-bottom:12px;border:1px solid #fff4}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ghost{background:transparent;border:1px solid var(--line)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:16px}
+.tile{all:unset;cursor:pointer;padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:center}
+.tile:hover{border-color:var(--red)}.tile b{display:block;font:700 12px Orbitron;margin-top:6px}

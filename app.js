@@ -1,5 +1,6 @@
 /* Box Box Box v2 — card lessons + quiz per module. Edit MODULES below. Progress in localStorage. */
 /* Lesson content. Each card: [title, explanation, optional swatch]. Each quiz item: [question, a, b, c, correctIndex]. */
+/* Lesson content. Each card: [title, explanation, optional swatch]. Each quiz item: [question, a, b, c, correctIndex]. */
 const M=(id,icon,title,cards,quiz)=>({id,icon,title,cards,quiz});
 const MODULES=[
 M("welcome","👋","Welcome to F1",[

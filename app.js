@@ -191,8 +191,7 @@ const MODULES = [
   )
 ];
 
-/* --- UI Logic Engine --- */
-
+/* --- State Management --- */
 let state = {
   activeModuleIndex: 0,
   cardIndex: 0,
@@ -217,14 +216,14 @@ function getRank(xp) {
 }
 
 function updateHeader() {
-  const xpEl = document.getElementById("xp-count");
-  const rankEl = document.getElementById("rank-title");
+  const xpEl = document.getElementById("xp");
+  const rankEl = document.getElementById("rank");
   if (xpEl) xpEl.textContent = `${state.xp} XP`;
   if (rankEl) rankEl.textContent = getRank(state.xp);
 }
 
 function renderSidebar() {
-  const nav = document.getElementById("module-nav");
+  const nav = document.getElementById("nav");
   if (!nav) return;
   nav.innerHTML = "";
 
@@ -249,15 +248,14 @@ function selectModule(index) {
 }
 
 function renderContent() {
-  const main = document.getElementById("main-content");
+  const main = document.getElementById("content");
   if (!main) return;
 
   const mod = MODULES[state.activeModuleIndex];
 
   if (!state.inQuiz) {
-    // Render Card Lesson
     const card = mod.cards[state.cardIndex];
-    const isFlag = card.length === 3; // Flag modules may pass color/gradient styles
+    const isFlag = card.length === 3;
     const styleAttr = isFlag ? `style="background: ${card[2]};"` : "";
 
     main.innerHTML = `
@@ -296,7 +294,6 @@ function renderContent() {
       }
     });
   } else {
-    // Render Quiz Question or Completion
     if (state.quizIndex < mod.quiz.length) {
       const q = mod.quiz[state.quizIndex];
       const questionText = q[0];
@@ -329,7 +326,6 @@ function renderContent() {
         });
       });
     } else {
-      // Quiz Finished
       const passed = state.score === mod.quiz.length;
       if (passed && !state.completedModules.includes(mod.id)) {
         state.completedModules.push(mod.id);
@@ -366,9 +362,15 @@ function renderContent() {
   }
 }
 
-// Initialize application on load
-window.addEventListener("DOMContentLoaded", () => {
+// Execute app init
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    updateHeader();
+    renderSidebar();
+    renderContent();
+  });
+} else {
   updateHeader();
   renderSidebar();
   renderContent();
-});
+}
